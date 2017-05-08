@@ -10,16 +10,16 @@
 
 set -eu
 
-new_domain=$1
+db_name=$1
+new_domain=$2
 
-MYSQL='mysql -u YOUR_USER -pYOUR_PASSWORD YOUR_DB_NAME'
 SQL_FILTER="where option_name in ('siteurl', 'home')"
 
-echo "rows before"
-echo "select * from wp_options $SQL_FILTER" | $MYSQL
+echo "Rows before:"
+echo "select * from wp_options $SQL_FILTER" | mysql -t $db_name
 
-echo "running update now"
-echo "update wp_options set option_value = 'http://${new_domain}' $SQL_FILTER" | $MYSQL
+echo "Running update now."
+echo "update wp_options set option_value = 'http://${new_domain}' $SQL_FILTER" | mysql $db_name
 
-echo "rows after"
-echo "select * from wp_options $SQL_FILTER" | $MYSQL
+echo "Rows after:"
+echo "select * from wp_options $SQL_FILTER" | mysql -t $db_name
